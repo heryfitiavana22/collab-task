@@ -1,0 +1,24 @@
+
+services:
+  db:
+    image: postgres:16
+    container_name: postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: posteo-back
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  adminer:
+    image: adminer
+    container_name: adminer
+    ports:
+      - "8082:8080"
+    environment:
+      ADMINER_DESIGN: "pepa-linha"
+
+volumes:
+  postgres_data:
