@@ -2,6 +2,7 @@ package org.collabtask.user.core.service;
 
 import java.util.List;
 
+import org.collabtask.helpers.PaginatedResponse;
 import org.collabtask.user.core.contracts.IUserService;
 import org.collabtask.user.core.dto.CreateUser;
 import org.collabtask.user.core.dto.UserClient;
@@ -12,7 +13,7 @@ import io.smallrye.mutiny.Uni;
 public class UserService implements IUserService {
 
     @Override
-    public Uni<List<UserClient>> findAll() {
+    public Uni<PaginatedResponse<List<UserClient>>> findAll() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findAll'");
     }
