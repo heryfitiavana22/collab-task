@@ -31,4 +31,12 @@ public class UserData {
     public CreateUser createUser() {
         return new CreateUser("username", "email@gmail.com");
     }
+
+    public UserEntity getUserEntity1() {
+        return userEntity1;
+    }
+
+    public UserEntity getUserEntity2() {
+        return userEntity2;
+    }
 }

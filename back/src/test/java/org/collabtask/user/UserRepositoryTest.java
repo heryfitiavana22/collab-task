@@ -1,7 +1,9 @@
 package org.collabtask.user;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.collabtask.helpers.Pagination;
 import org.collabtask.user.database.UserEntityRepository;
 import org.junit.jupiter.api.Test;
 
@@ -21,8 +23,10 @@ public class UserRepositoryTest {
     @Test
     void shouldFindAll(UniAsserter asserter) {
         asserter.execute(() -> userData.init())
-                .assertThat(() -> userRepository.findAll(), (data) -> {
+                .assertThat(() -> userRepository.findAll(new Pagination()), (data) -> {
                     assertNotNull(data);
+                    assertNotNull(data.getData());
+                    assertTrue(data.getData().size() > 0);
                 });
 
     }
