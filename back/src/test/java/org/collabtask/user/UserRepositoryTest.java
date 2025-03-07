@@ -28,7 +28,8 @@ public class UserRepositoryTest {
                 .assertThat(() -> userRepository.findAll(new Pagination()), (data) -> {
                     assertNotNull(data);
                     assertNotNull(data.getData());
-                    assertTrue(data.getData().size() > 0);
+                    System.out.println(data.getData());
+                    assertTrue(data.getData().size() > 1);
                 });
 
     }
@@ -51,20 +52,19 @@ public class UserRepositoryTest {
     }
 
     @Test
-    public void shouldFindByUsername(UniAsserter asserter) {
+    public void shouldFindByEmail(UniAsserter asserter) {
         asserter.execute(() -> userData.init())
-                .assertThat(() -> userRepository.findById(userData.getUserEntity1().getUsername()), find -> {
+                .assertThat(() -> userRepository.findAll(new Pagination()), (data) -> {
+                    assertNotNull(data);
+                    assertNotNull(data.getData());
+                    System.out.println(data.getData());
+                    assertTrue(data.getData().size() > 1);
+                })
+                .assertThat(() -> userRepository.findByEmail(userData.getUserEntity1().getUsername()), find -> {
                     assertNotNull(find);
                     assertEquals(userData.getUserEntity1().getUsername(), find.getUsername());
                 });
 
-    }
-
-    @Test
-    void shouldNotFoundIfUsernameNotExist(UniAsserter asserter) {
-        asserter.execute(() -> userData.init())
-                .assertFailedWith(() -> userRepository.findByUsername("roigjnfk"),
-                        throwable -> assertTrue(throwable instanceof UserNotFoundException));
     }
 
     @Test

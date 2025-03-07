@@ -25,9 +25,9 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Uni<UserClient> findByUsername(String username) throws UserNotFoundException {
+    public Uni<UserClient> findByEmail(String username) throws UserNotFoundException {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findByUsername'");
+        throw new UnsupportedOperationException("Unimplemented method 'findByEmail'");
     }
 
     @Override

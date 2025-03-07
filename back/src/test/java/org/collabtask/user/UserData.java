@@ -16,7 +16,7 @@ public class UserData {
 
     public Uni<String> init() {
         userEntity1 = new UserEntity();
-        userEntity1.setUsername("username1");
+        userEntity1.setUsername("eexammplee");
         userEntity1.setEmail("username1@gmail.com");
 
         userEntity2 = new UserEntity();
