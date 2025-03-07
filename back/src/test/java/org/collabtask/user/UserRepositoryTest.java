@@ -36,9 +36,9 @@ public class UserRepositoryTest {
     @Test
     public void shouldFindById(UniAsserter asserter) {
         asserter.execute(() -> userData.init())
-                .assertThat(() -> userRepository.findById(userData.getUserEntity1().id), post -> {
-                    assertNotNull(post);
-                    assertEquals(userData.getUserEntity1().id, post.getId());
+                .assertThat(() -> userRepository.findById(userData.getUserEntity1().id), find -> {
+                    assertNotNull(find);
+                    assertEquals(userData.getUserEntity1().id, find.getId());
                 });
 
     }
@@ -53,9 +53,9 @@ public class UserRepositoryTest {
     @Test
     public void shouldFindByUsername(UniAsserter asserter) {
         asserter.execute(() -> userData.init())
-                .assertThat(() -> userRepository.findById(userData.getUserEntity1().getUsername()), post -> {
-                    assertNotNull(post);
-                    assertEquals(userData.getUserEntity1().getUsername(), post.getUsername());
+                .assertThat(() -> userRepository.findById(userData.getUserEntity1().getUsername()), find -> {
+                    assertNotNull(find);
+                    assertEquals(userData.getUserEntity1().getUsername(), find.getUsername());
                 });
 
     }
@@ -66,4 +66,27 @@ public class UserRepositoryTest {
                 .assertFailedWith(() -> userRepository.findByUsername("roigjnfk"),
                         throwable -> assertTrue(throwable instanceof UserNotFoundException));
     }
+
+    @Test
+    void shouldCreate(UniAsserter asserter) {
+        asserter.execute(() -> userData.init())
+                .assertThat(() -> userRepository.create(userData.createUser()), created -> {
+                    assertNotNull(created);
+                    assertNotNull(created.getId());
+                    assertEquals(userData.createUser().getUsername(), created.getUsername());
+                    assertEquals(userData.createUser().getEmail(), created.getEmail());
+                });
+    }
+
+    @Test
+    public void shouldDeleteAndShouldNotFoundAfter(UniAsserter asserter) {
+        asserter.execute(() -> userData.init())
+                .assertThat(() -> userRepository.delete(userData.getUserEntity1().id), (deleted) -> {
+                    assertNotNull(deleted);
+                    assertEquals(userData.getUserEntity1().id, deleted.getId());
+                })
+                .assertFailedWith(() -> userRepository.findById(userData.getUserEntity1().id),
+                        throwable -> assertTrue(throwable instanceof UserNotFoundException));
+    }
+
 }
