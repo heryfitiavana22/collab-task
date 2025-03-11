@@ -9,14 +9,22 @@ import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
+@Data
+@EqualsAndHashCode(callSuper = false)
+@AllArgsConstructor
+@NoArgsConstructor
 @MappedSuperclass
 public abstract class BaseEntity extends PanacheEntityBase {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    public String id;
-    public ZonedDateTime createdAt;
-    public ZonedDateTime updatedAt;
+    protected String id;
+    protected ZonedDateTime createdAt;
+    protected ZonedDateTime updatedAt;
 
     @PrePersist
     public void prePersist() {
@@ -27,14 +35,6 @@ public abstract class BaseEntity extends PanacheEntityBase {
     @PreUpdate
     public void preUpdate() {
         updatedAt = ZonedDateTimeHelper.now();
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
 }
