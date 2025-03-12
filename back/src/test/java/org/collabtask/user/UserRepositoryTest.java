@@ -28,7 +28,6 @@ public class UserRepositoryTest {
                 .assertThat(() -> userRepository.findAll(new Pagination()), (data) -> {
                     assertNotNull(data);
                     assertNotNull(data.getData());
-                    System.out.println(data.getData());
                     assertTrue(data.getData().size() > 1);
                 });
 

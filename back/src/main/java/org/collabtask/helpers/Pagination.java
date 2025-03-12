@@ -11,12 +11,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Pagination {
     @RestQuery
-    protected int page;
+    protected int page = 0;
     @RestQuery
     protected int size;
     public static int DEFAULT_SIZE = 25;
 
     public Pagination(int page) {
         this.page = page;
+    }
+
+    public int getSize() {
+        return size == 0 ? DEFAULT_SIZE : size;
     }
 }
