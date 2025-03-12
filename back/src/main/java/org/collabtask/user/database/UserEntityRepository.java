@@ -1,7 +1,6 @@
 package org.collabtask.user.database;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.collabtask.helpers.PaginatedResponse;
 import org.collabtask.helpers.Pagination;
@@ -19,17 +18,7 @@ public class UserEntityRepository implements IUserRepository {
         Uni<List<UserEntity>> entities = UserEntity.findAll().page(pagination.getPage(), pagination.getSize()).list();
         Uni<Long> total = UserEntity.count();
 
-        Uni<List<UserClient>> usersClient = entities.map(userEntities -> userEntities.stream()
-                .map(entity -> entity.toClient())
-                .collect(Collectors.toList()));
-
-        return Uni.combine().all().unis(usersClient, total).asTuple()
-                .map(tuple -> {
-                    int totalPage = (int) Math.ceil(tuple.getItem2().doubleValue() / pagination.getSize());
-                    return new PaginatedResponse<>(
-                            new Pagination(pagination.getPage(), pagination.getSize()),
-                            tuple.getItem1(), totalPage);
-                });
+        return PaginatedResponse.paginate(entities, total, pagination);
     }
 
     @Override
@@ -44,7 +33,6 @@ public class UserEntityRepository implements IUserRepository {
     public Uni<UserClient> findByEmail(String username) throws UserNotFoundException {
         Uni<UserEntity> find = UserEntity.find("username", username).firstResult();
         return find.onItem().transformToUni(entity -> {
-            System.out.println(entity);
             if (entity == null)
                 return Uni.createFrom().failure(() -> new UserNotFoundException(" username: " + username));
             return Uni.createFrom().item((entity.toClient()));
