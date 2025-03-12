@@ -1,45 +1,46 @@
 package org.collabtask.user.core.service;
 
-import java.util.List;
-
 import org.collabtask.helpers.PaginatedResponse;
+import org.collabtask.helpers.Pagination;
+import org.collabtask.user.core.contracts.IUserRepository;
 import org.collabtask.user.core.contracts.IUserService;
 import org.collabtask.user.core.dto.CreateUser;
 import org.collabtask.user.core.dto.UserClient;
 import org.collabtask.user.core.exception.UserNotFoundException;
 
 import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
 
+@ApplicationScoped
 public class UserService implements IUserService {
+    private IUserRepository userRepository;
 
     @Override
-    public Uni<PaginatedResponse<List<UserClient>>> findAll() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+    public Uni<PaginatedResponse<UserClient>> findAll(Pagination pagination) {
+        if (pagination == null) {
+            pagination = new Pagination();
+        }
+        return userRepository.findAll(pagination);
     }
 
     @Override
     public Uni<UserClient> findById(String id) throws UserNotFoundException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+        return userRepository.findById(id);
     }
 
     @Override
-    public Uni<UserClient> findByEmail(String username) throws UserNotFoundException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findByEmail'");
+    public Uni<UserClient> findByEmail(String email) throws UserNotFoundException {
+        return userRepository.findByEmail(email);
     }
 
     @Override
     public Uni<UserClient> create(CreateUser data) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'create'");
+        return userRepository.create(data);
     }
 
     @Override
     public Uni<UserClient> delete(String id) throws UserNotFoundException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+        return userRepository.delete(id);
     }
 
 }
