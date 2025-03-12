@@ -1,28 +1,28 @@
 package org.collabtask.task.core.contracts;
 
 import org.collabtask.helpers.FindByUserIdPagination;
+import org.collabtask.helpers.PaginatedResponse;
 import org.collabtask.task.core.dto.CreateTask;
 import org.collabtask.task.core.dto.TaskClient;
 import org.collabtask.task.core.model.TaskPriority;
 import org.collabtask.task.core.model.TaskStatus;
 
-import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 
 public interface ITaskRepository {
-    Multi<TaskClient> findAll(FindByUserIdPagination findByUserIdPagination);
+    Uni<PaginatedResponse<TaskClient>> findAll(FindByUserIdPagination findByUserIdPagination);
 
-    Multi<TaskClient> findByAssignedUsersId(String userId);
+    Uni<PaginatedResponse<TaskClient>> findByAssignedUsersId(String userId);
 
-    Multi<TaskClient> findByCreatedById(String userId);
+    Uni<PaginatedResponse<TaskClient>> findByCreatedById(String userId);
 
-    Multi<TaskClient> findByStatus(TaskStatus status);
+    Uni<PaginatedResponse<TaskClient>> findByStatus(TaskStatus status);
 
-    Multi<TaskClient> findByPriorityOrderByDueDate(TaskPriority priority);
+    Uni<PaginatedResponse<TaskClient>> findByPriorityOrderByDueDate(TaskPriority priority);
 
-    Multi<TaskClient> findLateTasks();
+    Uni<PaginatedResponse<TaskClient>> findLateTasks();
 
-    Multi<TaskClient> findUrgentTasks();
+    Uni<PaginatedResponse<TaskClient>> findUrgentTasks();
 
     Uni<TaskClient> createTask(CreateTask request);
 

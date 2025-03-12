@@ -15,7 +15,7 @@ import io.smallrye.mutiny.Uni;
 public class UserEntityRepository implements IUserRepository {
 
     @Override
-    public Uni<PaginatedResponse<List<UserClient>>> findAll(Pagination pagination) {
+    public Uni<PaginatedResponse<UserClient>> findAll(Pagination pagination) {
         Uni<List<UserEntity>> entities = UserEntity.findAll().page(pagination.getPage(), pagination.getSize()).list();
         Uni<Long> total = UserEntity.count();
 
