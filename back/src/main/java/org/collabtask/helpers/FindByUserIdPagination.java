@@ -11,4 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FindByUserIdPagination extends Pagination {
     protected String userId;
+
+    public FindByUserIdPagination(int page, String userId) {
+        super(page);
+        this.userId = userId;
+    }
 }
