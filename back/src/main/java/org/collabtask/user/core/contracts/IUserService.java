@@ -1,8 +1,7 @@
 package org.collabtask.user.core.contracts;
 
-import java.util.List;
-
 import org.collabtask.helpers.PaginatedResponse;
+import org.collabtask.helpers.Pagination;
 import org.collabtask.user.core.dto.CreateUser;
 import org.collabtask.user.core.dto.UserClient;
 import org.collabtask.user.core.exception.UserNotFoundException;
@@ -10,11 +9,11 @@ import org.collabtask.user.core.exception.UserNotFoundException;
 import io.smallrye.mutiny.Uni;
 
 public interface IUserService {
-    Uni<PaginatedResponse<List<UserClient>>> findAll();
+    Uni<PaginatedResponse<UserClient>> findAll(Pagination pagination);
 
     Uni<UserClient> findById(String id) throws UserNotFoundException;
 
-    Uni<UserClient> findByEmail(String username) throws UserNotFoundException;
+    Uni<UserClient> findByEmail(String email) throws UserNotFoundException;
 
     Uni<UserClient> create(CreateUser data);
 

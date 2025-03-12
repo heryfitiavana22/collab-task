@@ -14,7 +14,7 @@ public interface IUserRepository {
 
     Uni<UserClient> findById(String id) throws UserNotFoundException;
 
-    Uni<UserClient> findByEmail(String username) throws UserNotFoundException;
+    Uni<UserClient> findByEmail(String email) throws UserNotFoundException;
 
     Uni<UserClient> create(CreateUser data);
 
