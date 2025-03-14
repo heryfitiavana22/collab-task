@@ -14,7 +14,9 @@ import org.collabtask.task.core.model.TaskPriority;
 import org.collabtask.task.core.model.TaskStatus;
 
 import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
 
+@ApplicationScoped
 public class TaskEntityRepository implements ITaskRepository {
 
     @Override

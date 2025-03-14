@@ -44,80 +44,92 @@ public class TaskServiceTest {
 
     @Test
     void shouldNotCreateTaskWithInvalidDueDate(UniAsserter asserter) {
-        CreateTask invalidTask = taskData.createTask();
-        invalidTask.setDueDate(ZonedDateTimeHelper.now().minusDays(1));
-
         asserter.execute(() -> taskData.init())
-                .assertFailedWith(() -> taskService.create(invalidTask), throwable -> {
+                .assertFailedWith(() -> {
+                    CreateTask invalidTask = taskData.createTask();
+                    invalidTask.setDueDate(ZonedDateTimeHelper.now().minusDays(1));
+                    return taskService.create(invalidTask);
+                }, throwable -> {
                     assertTrue(throwable instanceof InvalidTaskException);
                 });
     }
 
     @Test
     void shouldNotCreateTaskWithoutStatusOtherThanToDo(UniAsserter asserter) {
-        CreateTask invalidTask = taskData.createTask();
-        invalidTask.setStatus(TaskStatus.COMPLETED);
-
         asserter.execute(() -> taskData.init())
-                .assertFailedWith(() -> taskService.create(invalidTask), throwable -> {
+                .assertFailedWith(() -> {
+                    CreateTask invalidTask = taskData.createTask();
+                    invalidTask.setStatus(TaskStatus.COMPLETED);
+                    return taskService.create(invalidTask);
+                }, throwable -> {
                     assertTrue(throwable instanceof InvalidTaskException);
                 });
     }
 
     @Test
     void shouldNotCreateTaskWithoutTitle(UniAsserter asserter) {
-        CreateTask invalidTask = taskData.createTask();
-        invalidTask.setTitle(null);
-
         asserter.execute(() -> taskData.init())
-                .assertFailedWith(() -> taskService.create(invalidTask), throwable -> {
+                .assertFailedWith(() -> {
+                    CreateTask invalidTask = taskData.createTask();
+                    invalidTask.setTitle(null);
+                    return taskService.create(invalidTask);
+                }, throwable -> {
                     assertTrue(throwable instanceof InvalidTaskException);
                 });
     }
 
     @Test
     void shouldNotCreateTaskWithoutPriority(UniAsserter asserter) {
-        CreateTask invalidTask = taskData.createTask();
-        invalidTask.setPriority(null);
-
         asserter.execute(() -> taskData.init())
-                .assertFailedWith(() -> taskService.create(invalidTask), throwable -> {
-                    assertTrue(throwable instanceof InvalidTaskException);
-                });
+                .assertFailedWith(
+                        () -> {
+                            CreateTask invalidTask = taskData.createTask();
+                            invalidTask.setPriority(null);
+
+                            return taskService.create(invalidTask);
+                        }, throwable -> {
+                            assertTrue(throwable instanceof InvalidTaskException);
+                        });
     }
 
     @Test
     void shouldNotCreateTaskWithoutCreatedByUserId(UniAsserter asserter) {
-        CreateTask invalidTask = taskData.createTask();
-        invalidTask.setCreatedByUserId(null);
-
         asserter.execute(() -> taskData.init())
-                .assertFailedWith(() -> taskService.create(invalidTask), throwable -> {
-                    assertTrue(throwable instanceof InvalidTaskException);
-                });
+                .assertFailedWith(
+                        () -> {
+                            CreateTask invalidTask = taskData.createTask();
+                            invalidTask.setCreatedByUserId(null);
+                            return taskService.create(invalidTask);
+                        }, throwable -> {
+                            assertTrue(throwable instanceof InvalidTaskException);
+                        });
     }
 
     @Test
     void shouldNotCreateTaskWithUserIdNotFoundInCreatedByUserId(UniAsserter asserter) {
-        CreateTask invalidTask = taskData.createTask();
-        invalidTask.setCreatedByUserId("dsaflkjdk");
-
         asserter.execute(() -> taskData.init())
-                .assertFailedWith(() -> taskService.create(invalidTask), throwable -> {
-                    assertTrue(throwable instanceof UserNotFoundException);
-                });
+                .assertFailedWith(
+                        () -> {
+                            CreateTask invalidTask = taskData.createTask();
+                            invalidTask.setCreatedByUserId("dsaflkjdk");
+                            return taskService.create(invalidTask);
+                        }, throwable -> {
+                            assertTrue(throwable instanceof UserNotFoundException);
+                        });
     }
 
     @Test
     void shouldNotCreateTaskWithUserIdNotFoundInAssignedUsersId(UniAsserter asserter) {
-        List<String> assignedUsersId = new ArrayList<>();
-        assignedUsersId.add("cnvjzxlkf");
-        CreateTask invalidTask = taskData.createTask();
-        invalidTask.setAssignedUsersId(assignedUsersId);
-
         asserter.execute(() -> taskData.init())
-                .assertFailedWith(() -> taskService.create(invalidTask), throwable -> {
-                    assertTrue(throwable instanceof UserNotFoundException);
-                });
+                .assertFailedWith(
+                        () -> {
+                            List<String> assignedUsersId = new ArrayList<>();
+                            assignedUsersId.add("cnvjzxlkf");
+                            CreateTask invalidTask = taskData.createTask();
+                            invalidTask.setAssignedUsersId(assignedUsersId);
+                            return taskService.create(invalidTask);
+                        }, throwable -> {
+                            assertTrue(throwable instanceof UserNotFoundException);
+                        });
     }
 }
