@@ -2,7 +2,7 @@ package org.collabtask.task.core.exception;
 
 public class TaskNotFoundException extends RuntimeException {
     public TaskNotFoundException(String message) {
-        super("TaskNotFoundException " + message);
+        super("Task not found " + message);
     }
 
     public TaskNotFoundException(String message, Throwable cause) {
