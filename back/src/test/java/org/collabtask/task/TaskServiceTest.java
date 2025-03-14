@@ -55,7 +55,7 @@ public class TaskServiceTest {
     }
 
     @Test
-    void shouldNotCreateTaskWithoutStatusOtherThanToDo(UniAsserter asserter) {
+    void shouldNotCreateTaskWithStatusOtherThanToDo(UniAsserter asserter) {
         asserter.execute(() -> taskData.init())
                 .assertFailedWith(() -> {
                     CreateTask invalidTask = taskData.createTask();
