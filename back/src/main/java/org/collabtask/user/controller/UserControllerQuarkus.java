@@ -12,6 +12,7 @@ import org.collabtask.user.core.exception.UserNotFoundException;
 import io.quarkus.hibernate.reactive.panache.common.WithSession;
 import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.smallrye.mutiny.Uni;
+import jakarta.ws.rs.BeanParam;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -29,7 +30,7 @@ public class UserControllerQuarkus implements IUserControllerQuarkus {
     @Override
     @GET
     @WithSession
-    public Uni<PaginatedResponse<UserClient>> findAll(Pagination pagination) {
+    public Uni<PaginatedResponse<UserClient>> findAll(@BeanParam Pagination pagination) {
         return userService.findAll(pagination);
     }
 
