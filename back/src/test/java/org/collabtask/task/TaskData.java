@@ -60,7 +60,7 @@ public class TaskData {
 
     public UpdateTask updateTask() {
         return new UpdateTask("UpdateTask", "des", TaskPriority.basse, TaskStatus.TO_DO,
-                ZonedDateTimeHelper.now().plusDays(2), userData.getUserEntity1().getId());
+                ZonedDateTimeHelper.now().plusDays(2));
     }
 
     public UpdateTask updateTaskPartial() {

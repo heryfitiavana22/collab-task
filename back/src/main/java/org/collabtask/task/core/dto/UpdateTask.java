@@ -18,5 +18,4 @@ public class UpdateTask {
     private TaskPriority priority;
     private TaskStatus status;
     private ZonedDateTime dueDate;
-    private String createdByUserId;
 }

@@ -69,9 +69,6 @@ public class TaskEntity extends BaseEntity implements ConvertibleToClient<TaskCl
         if (updateTask.getDueDate() != null) {
             this.dueDate = updateTask.getDueDate();
         }
-        if (updateTask.getCreatedByUserId() != null) {
-            this.createdBy = new UserEntity(updateTask.getCreatedByUserId());
-        }
         return this.persist();
     }
 
