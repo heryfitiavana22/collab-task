@@ -15,6 +15,10 @@ import jakarta.enterprise.context.ApplicationScoped;
 public class UserService implements IUserService {
     private IUserRepository userRepository;
 
+    public UserService(IUserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     @Override
     public Uni<PaginatedResponse<UserClient>> findAll(Pagination pagination) {
         if (pagination == null) {
