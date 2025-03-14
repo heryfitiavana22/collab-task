@@ -10,7 +10,9 @@ import org.collabtask.user.core.dto.UserClient;
 import org.collabtask.user.core.exception.UserNotFoundException;
 
 import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
 
+@ApplicationScoped
 public class UserEntityRepository implements IUserRepository {
 
     @Override
