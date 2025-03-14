@@ -2,6 +2,7 @@ package org.collabtask.user.controller;
 
 import org.collabtask.helpers.PaginatedResponse;
 import org.collabtask.helpers.Pagination;
+import org.collabtask.helpers.exception.NotFoundMessageException;
 import org.collabtask.user.core.contracts.IUserControllerQuarkus;
 import org.collabtask.user.core.contracts.IUserService;
 import org.collabtask.user.core.dto.CreateUser;
@@ -11,7 +12,6 @@ import org.collabtask.user.core.exception.UserNotFoundException;
 import io.quarkus.hibernate.reactive.panache.common.WithSession;
 import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.smallrye.mutiny.Uni;
-import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -39,7 +39,7 @@ public class UserControllerQuarkus implements IUserControllerQuarkus {
     @Path("/{id}")
     public Uni<UserClient> findById(@PathParam("id") String id) {
         return userService.findById(id)
-                .onFailure(UserNotFoundException.class).transform(e -> new BadRequestException(e));
+                .onFailure(UserNotFoundException.class).transform(e -> new NotFoundMessageException(e));
     }
 
     @Override
@@ -48,7 +48,7 @@ public class UserControllerQuarkus implements IUserControllerQuarkus {
     @Path("/email/{email}")
     public Uni<UserClient> findByEmail(@PathParam("email") String email) {
         return userService.findByEmail(email)
-                .onFailure(UserNotFoundException.class).transform(e -> new BadRequestException(e));
+                .onFailure(UserNotFoundException.class).transform(e -> new NotFoundMessageException(e));
     }
 
     @Override
@@ -64,7 +64,7 @@ public class UserControllerQuarkus implements IUserControllerQuarkus {
     @WithTransaction
     public Uni<UserClient> delete(@PathParam("id") String id) {
         return userService.delete(id)
-                .onFailure(UserNotFoundException.class).transform(e -> new BadRequestException(e));
+                .onFailure(UserNotFoundException.class).transform(e -> new NotFoundMessageException(e));
     }
 
 }
