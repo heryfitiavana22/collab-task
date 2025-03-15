@@ -77,12 +77,12 @@ public class TaskEntityRepository implements ITaskRepository {
     }
 
     @Override
-    public Uni<TaskClient> update(String id, UpdateTask createTask) throws TaskNotFoundException {
+    public Uni<TaskClient> update(String id, UpdateTask updateTask) throws TaskNotFoundException {
         Uni<TaskEntity> find = TaskEntity.findById(id);
         return find.onItem().transformToUni(entity -> {
             if (entity == null)
                 return Uni.createFrom().failure(() -> new TaskNotFoundException(id));
-            return entity.updateFrom(createTask).map(el -> el.toClient());
+            return entity.updateFrom(updateTask).map(el -> el.toClient());
         });
     }
 
