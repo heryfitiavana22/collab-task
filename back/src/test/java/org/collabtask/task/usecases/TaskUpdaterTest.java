@@ -200,4 +200,53 @@ public class TaskUpdaterTest {
                     assertEquals(TaskStatus.IN_PROGRESS, updated.getStatus());
                 });
     }
+
+    @Test
+    void shouldNotUpdateStatusFromToDoToOverdue(UniAsserter asserter) {
+        asserter.execute(() -> taskData.init())
+                .assertFailedWith(() -> {
+                    UpdateTask updateTask = taskData.updateTask();
+                    updateTask.setStatus(TaskStatus.OVERDUE);
+                    return taskUpdater.update(taskData.getTaskTodoNormale().getId(), updateTask);
+                }, throwable -> {
+                    assertTrue(throwable instanceof InvalidTaskException);
+                });
+    }
+
+    @Test
+    void shouldNotUpdateStatusFromInProgressToOverdue(UniAsserter asserter) {
+        asserter.execute(() -> taskData.init())
+                .assertFailedWith(() -> {
+                    UpdateTask updateTask = taskData.updateTask();
+                    updateTask.setStatus(TaskStatus.OVERDUE);
+                    return taskUpdater.update(taskData.getTaskProgressHaute().getId(), updateTask);
+                }, throwable -> {
+                    assertTrue(throwable instanceof InvalidTaskException);
+                });
+    }
+
+    @Test
+    void shouldNotUpdateStatusFromInProgressToToDo(UniAsserter asserter) {
+        asserter.execute(() -> taskData.init())
+                .assertFailedWith(() -> {
+                    UpdateTask updateTask = taskData.updateTask();
+                    updateTask.setStatus(TaskStatus.TO_DO);
+                    return taskUpdater.update(taskData.getTaskProgressHaute().getId(), updateTask);
+                }, throwable -> {
+                    assertTrue(throwable instanceof InvalidTaskException);
+                });
+    }
+
+    @Test
+    void shouldNotUpdateStatusFromBlockedToOverdue(UniAsserter asserter) {
+        asserter.execute(() -> taskData.init())
+                .assertFailedWith(() -> {
+                    UpdateTask updateTask = taskData.updateTask();
+                    updateTask.setStatus(TaskStatus.OVERDUE);
+                    return taskUpdater.update(taskData.getTaskBlockedHaute().getId(), updateTask);
+                }, throwable -> {
+                    assertTrue(throwable instanceof InvalidTaskException);
+                });
+    }
+
 }
