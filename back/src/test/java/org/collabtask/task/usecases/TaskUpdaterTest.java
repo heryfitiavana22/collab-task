@@ -109,4 +109,95 @@ public class TaskUpdaterTest {
                     assertTrue(throwable instanceof InvalidTaskException);
                 });
     }
+
+    @Test
+    void shouldUpdateStatusFromToDoToInProgress(UniAsserter asserter) {
+        asserter.execute(() -> taskData.init())
+                .assertThat(() -> {
+                    UpdateTask updateTask = taskData.updateTask();
+                    updateTask.setStatus(TaskStatus.IN_PROGRESS);
+                    return taskUpdater.update(taskData.getTaskTodoNormale().getId(), updateTask);
+                }, updated -> {
+                    assertNotNull(updated);
+                    assertEquals(TaskStatus.IN_PROGRESS, updated.getStatus());
+                });
+    }
+
+    @Test
+    void shouldUpdateStatusFromToDoToBlocked(UniAsserter asserter) {
+        asserter.execute(() -> taskData.init())
+                .assertThat(() -> {
+                    UpdateTask updateTask = taskData.updateTask();
+                    updateTask.setStatus(TaskStatus.BLOCKED);
+                    return taskUpdater.update(taskData.getTaskTodoNormale().getId(), updateTask);
+                }, updated -> {
+                    assertNotNull(updated);
+                    assertEquals(TaskStatus.BLOCKED, updated.getStatus());
+                });
+    }
+
+    @Test
+    void shouldUpdateStatusFromToDoToCompleted(UniAsserter asserter) {
+        asserter.execute(() -> taskData.init())
+                .assertThat(() -> {
+                    UpdateTask updateTask = taskData.updateTask();
+                    updateTask.setStatus(TaskStatus.COMPLETED);
+                    return taskUpdater.update(taskData.getTaskTodoNormale().getId(), updateTask);
+                }, updated -> {
+                    assertNotNull(updated);
+                    assertEquals(TaskStatus.COMPLETED, updated.getStatus());
+                });
+    }
+
+    @Test
+    void shouldUpdateStatusFromInProgressToBlocked(UniAsserter asserter) {
+        asserter.execute(() -> taskData.init())
+                .assertThat(() -> {
+                    UpdateTask updateTask = taskData.updateTask();
+                    updateTask.setStatus(TaskStatus.BLOCKED);
+                    return taskUpdater.update(taskData.getTaskProgressHaute().getId(), updateTask);
+                }, updated -> {
+                    assertNotNull(updated);
+                    assertEquals(TaskStatus.BLOCKED, updated.getStatus());
+                });
+    }
+
+    @Test
+    void shouldUpdateStatusFromInProgressToCompleted(UniAsserter asserter) {
+        asserter.execute(() -> taskData.init())
+                .assertThat(() -> {
+                    UpdateTask updateTask = taskData.updateTask();
+                    updateTask.setStatus(TaskStatus.COMPLETED);
+                    return taskUpdater.update(taskData.getTaskProgressHaute().getId(), updateTask);
+                }, updated -> {
+                    assertNotNull(updated);
+                    assertEquals(TaskStatus.COMPLETED, updated.getStatus());
+                });
+    }
+
+    @Test
+    void shouldUpdateStatusFromBlockedToToDo(UniAsserter asserter) {
+        asserter.execute(() -> taskData.init())
+                .assertThat(() -> {
+                    UpdateTask updateTask = taskData.updateTask();
+                    updateTask.setStatus(TaskStatus.TO_DO);
+                    return taskUpdater.update(taskData.getTaskOverdueNormale().getId(), updateTask);
+                }, updated -> {
+                    assertNotNull(updated);
+                    assertEquals(TaskStatus.TO_DO, updated.getStatus());
+                });
+    }
+
+    @Test
+    void shouldUpdateStatusFromBlockedToInProgress(UniAsserter asserter) {
+        asserter.execute(() -> taskData.init())
+                .assertThat(() -> {
+                    UpdateTask updateTask = taskData.updateTask();
+                    updateTask.setStatus(TaskStatus.IN_PROGRESS);
+                    return taskUpdater.update(taskData.getTaskOverdueNormale().getId(), updateTask);
+                }, updated -> {
+                    assertNotNull(updated);
+                    assertEquals(TaskStatus.IN_PROGRESS, updated.getStatus());
+                });
+    }
 }
