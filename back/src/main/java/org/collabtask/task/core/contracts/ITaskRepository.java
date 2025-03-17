@@ -15,6 +15,12 @@ import io.smallrye.mutiny.Uni;
 public interface ITaskRepository {
     Uni<PaginatedResponse<TaskClient>> findAll(Pagination pagination);
 
+    Uni<TaskClient> findById(String id) throws TaskNotFoundException;
+
+    Uni<TaskClient> create(CreateTask createTask);
+
+    Uni<TaskClient> update(String id, UpdateTask updateTask) throws TaskNotFoundException;
+
     Uni<PaginatedResponse<TaskClient>> findByAssignedUsersId(String userId);
 
     Uni<PaginatedResponse<TaskClient>> findByCreatedByUserId(FindByUserIdPagination findByUserIdPagination);
@@ -26,9 +32,5 @@ public interface ITaskRepository {
     Uni<PaginatedResponse<TaskClient>> findLate();
 
     Uni<PaginatedResponse<TaskClient>> findUrgent();
-
-    Uni<TaskClient> create(CreateTask createTask);
-
-    Uni<TaskClient> update(String id, UpdateTask updateTask) throws TaskNotFoundException;
 
 }

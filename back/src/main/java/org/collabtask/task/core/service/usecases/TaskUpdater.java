@@ -7,7 +7,9 @@ import org.collabtask.task.core.exception.TaskNotFoundException;
 import org.collabtask.task.database.TaskEntityRepository;
 
 import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
 
+@ApplicationScoped
 public class TaskUpdater {
     TaskEntityRepository taskEntityRepository;
 

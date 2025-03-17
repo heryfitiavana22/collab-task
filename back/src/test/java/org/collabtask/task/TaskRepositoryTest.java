@@ -82,4 +82,21 @@ public class TaskRepositoryTest {
                 .assertFailedWith(() -> taskRepository.update("nonexistentTaskId", taskData.updateTask()),
                         throwable -> assertTrue(throwable instanceof TaskNotFoundException));
     }
+
+    @Test
+    void shouldFindById(UniAsserter asserter) {
+        asserter.execute(() -> taskData.init())
+                .assertThat(() -> taskRepository.findById(taskData.getTaskTodoNormale().getId()),
+                        updated -> {
+                            assertNotNull(updated);
+                            assertEquals(taskData.updateTask().getTitle(), updated.getTitle());
+                        });
+    }
+
+    @Test
+    void shouldNotFindByIdIfTaskIdDoesNotExist(UniAsserter asserter) {
+        asserter.execute(() -> taskData.init())
+                .assertFailedWith(() -> taskRepository.findById("nonexistentTaskId"),
+                        throwable -> assertTrue(throwable instanceof TaskNotFoundException));
+    }
 }

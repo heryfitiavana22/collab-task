@@ -36,4 +36,9 @@ public class TaskService implements ITaskService {
     public Uni<TaskClient> update(String id, UpdateTask updateTask) throws TaskNotFoundException, InvalidTaskException {
         return taskUpdater.update(id, updateTask);
     }
+
+    @Override
+    public Uni<TaskClient> findById(String id) throws TaskNotFoundException {
+        return taskEntityRepository.findById(id);
+    }
 }

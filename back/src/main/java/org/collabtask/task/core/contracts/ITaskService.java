@@ -12,5 +12,7 @@ import io.smallrye.mutiny.Uni;
 public interface ITaskService {
     Uni<TaskClient> create(CreateTask createTask) throws InvalidTaskException, UserNotFoundException;
 
-    public Uni<TaskClient> update(String id, UpdateTask updateTask) throws TaskNotFoundException, InvalidTaskException;
+    Uni<TaskClient> update(String id, UpdateTask updateTask) throws TaskNotFoundException, InvalidTaskException;
+
+    Uni<TaskClient> findById(String id) throws TaskNotFoundException;
 }

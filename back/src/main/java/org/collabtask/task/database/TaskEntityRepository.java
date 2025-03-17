@@ -30,9 +30,30 @@ public class TaskEntityRepository implements ITaskRepository {
     }
 
     @Override
-    public Uni<PaginatedResponse<TaskClient>> findByAssignedUsersId(String userId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findByAssignedUsersId'");
+    public Uni<TaskClient> create(CreateTask createTask) {
+        TaskEntity entity = new TaskEntity(createTask);
+        Uni<TaskEntity> created = entity.persist();
+        return created.map(el -> el.toClient());
+    }
+
+    @Override
+    public Uni<TaskClient> update(String id, UpdateTask updateTask) throws TaskNotFoundException {
+        Uni<TaskEntity> find = TaskEntity.findById(id);
+        return find.onItem().transformToUni(entity -> {
+            if (entity == null)
+                return Uni.createFrom().failure(() -> new TaskNotFoundException(id));
+            return entity.updateFrom(updateTask).map(el -> el.toClient());
+        });
+    }
+
+    @Override
+    public Uni<TaskClient> findById(String id) throws TaskNotFoundException {
+        Uni<TaskEntity> find = TaskEntity.findById(id);
+        return find.onItem().transformToUni(entity -> {
+            if (entity == null)
+                return Uni.createFrom().failure(() -> new TaskNotFoundException(id));
+            return Uni.createFrom().item(entity.toClient());
+        });
     }
 
     @Override
@@ -43,6 +64,12 @@ public class TaskEntityRepository implements ITaskRepository {
         Uni<Long> total = TaskEntity.count("createdBy.id = ?1", findByUserIdPagination.getUserId());
 
         return PaginatedResponse.paginate(find, total, findByUserIdPagination);
+    }
+
+    @Override
+    public Uni<PaginatedResponse<TaskClient>> findByAssignedUsersId(String userId) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findByAssignedUsersId'");
     }
 
     @Override
@@ -67,23 +94,6 @@ public class TaskEntityRepository implements ITaskRepository {
     public Uni<PaginatedResponse<TaskClient>> findUrgent() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findUrgent'");
-    }
-
-    @Override
-    public Uni<TaskClient> create(CreateTask createTask) {
-        TaskEntity entity = new TaskEntity(createTask);
-        Uni<TaskEntity> created = entity.persist();
-        return created.map(el -> el.toClient());
-    }
-
-    @Override
-    public Uni<TaskClient> update(String id, UpdateTask updateTask) throws TaskNotFoundException {
-        Uni<TaskEntity> find = TaskEntity.findById(id);
-        return find.onItem().transformToUni(entity -> {
-            if (entity == null)
-                return Uni.createFrom().failure(() -> new TaskNotFoundException(id));
-            return entity.updateFrom(updateTask).map(el -> el.toClient());
-        });
     }
 
 }
