@@ -28,6 +28,12 @@ public class TaskUpdater {
                                 .failure(() -> new InvalidTaskException("Cannot update status COMPLETED"));
                     }
 
+                    if (updateTask.getStatus() == TaskStatus.OVERDUE && updateTask.getDueDate() == null) {
+                        return Uni.createFrom()
+                                .failure(() -> new InvalidTaskException(
+                                        "Cannot update status to OVERDUE without due date"));
+                    }
+
                     if (oldTask.getStatus() == TaskStatus.TO_DO && updateTask.getStatus() == TaskStatus.OVERDUE) {
                         return Uni.createFrom()
                                 .failure(() -> new InvalidTaskException("Cannot update status from TO_DO to OVERDUE"));

@@ -249,4 +249,16 @@ public class TaskUpdaterTest {
                 });
     }
 
+    @Test
+    void shouldNotUpdateStatusToOverdueWithoutDueDate(UniAsserter asserter) {
+        asserter.execute(() -> taskData.init())
+                .assertFailedWith(() -> {
+                    UpdateTask updateTask = new UpdateTask();
+                    updateTask.setStatus(TaskStatus.OVERDUE);
+                    return taskUpdater.update(taskData.getTaskTodoNormale().getId(), updateTask);
+                }, throwable -> {
+                    System.out.println(throwable.getMessage());
+                    assertTrue(throwable instanceof InvalidTaskException);
+                });
+    }
 }
