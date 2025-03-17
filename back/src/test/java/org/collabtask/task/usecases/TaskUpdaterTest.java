@@ -47,7 +47,7 @@ public class TaskUpdaterTest {
                 .assertThat(() -> taskUpdater.update(taskData.getTaskTodoNormale().getId(), updateTaskPartial),
                         updated -> {
                             assertNotNull(updated);
-                            assertEquals(taskData.updateTask().getTitle(), updated.getTitle());
+                            assertEquals(updateTaskPartial.getTitle(), updated.getTitle());
                         });
     }
 
@@ -60,12 +60,12 @@ public class TaskUpdaterTest {
     }
 
     @Test
-    void shouldNotUpdateTaskWithInvalidDueDate(UniAsserter asserter) {
+    void shouldNotUpdateTaskWithInvalidDueDateAndCompleted(UniAsserter asserter) {
         asserter.execute(() -> taskData.init())
                 .assertFailedWith(() -> {
                     UpdateTask invalidTask = taskData.updateTask();
                     invalidTask.setDueDate(ZonedDateTimeHelper.now().minusDays(1));
-                    return taskUpdater.update(taskData.getTaskTodoNormale().getId(), invalidTask);
+                    return taskUpdater.update(taskData.getTaskCompletedHaute().getId(), invalidTask);
                 }, throwable -> {
                     assertTrue(throwable instanceof InvalidTaskException);
                 });
@@ -75,7 +75,7 @@ public class TaskUpdaterTest {
     void shouldUpdateOverdueTaskStatusToToDoOrInProgressIfDueDateFuture(UniAsserter asserter) {
         asserter.execute(() -> taskData.init())
                 .assertThat(() -> {
-                    UpdateTask updateTask = taskData.updateTask();
+                    UpdateTask updateTask = new UpdateTask();
                     updateTask.setDueDate(ZonedDateTimeHelper.now().plusDays(3));
                     return taskUpdater.update(taskData.getTaskOverdueNormale().getId(), updateTask);
                 }, updated -> {
@@ -181,7 +181,7 @@ public class TaskUpdaterTest {
                 .assertThat(() -> {
                     UpdateTask updateTask = taskData.updateTask();
                     updateTask.setStatus(TaskStatus.TO_DO);
-                    return taskUpdater.update(taskData.getTaskOverdueNormale().getId(), updateTask);
+                    return taskUpdater.update(taskData.getTaskBlockedHaute().getId(), updateTask);
                 }, updated -> {
                     assertNotNull(updated);
                     assertEquals(TaskStatus.TO_DO, updated.getStatus());
@@ -194,7 +194,7 @@ public class TaskUpdaterTest {
                 .assertThat(() -> {
                     UpdateTask updateTask = taskData.updateTask();
                     updateTask.setStatus(TaskStatus.IN_PROGRESS);
-                    return taskUpdater.update(taskData.getTaskOverdueNormale().getId(), updateTask);
+                    return taskUpdater.update(taskData.getTaskBlockedHaute().getId(), updateTask);
                 }, updated -> {
                     assertNotNull(updated);
                     assertEquals(TaskStatus.IN_PROGRESS, updated.getStatus());

@@ -87,9 +87,9 @@ public class TaskRepositoryTest {
     void shouldFindById(UniAsserter asserter) {
         asserter.execute(() -> taskData.init())
                 .assertThat(() -> taskRepository.findById(taskData.getTaskTodoNormale().getId()),
-                        updated -> {
-                            assertNotNull(updated);
-                            assertEquals(taskData.updateTask().getTitle(), updated.getTitle());
+                        find -> {
+                            assertNotNull(find);
+                            assertEquals(taskData.getTaskTodoNormale().getTitle(), find.getTitle());
                         });
     }
 
