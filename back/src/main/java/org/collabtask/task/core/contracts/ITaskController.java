@@ -1,5 +1,7 @@
 package org.collabtask.task.core.contracts;
 
+import org.collabtask.helpers.PaginatedResponse;
+import org.collabtask.helpers.Pagination;
 import org.collabtask.task.core.dto.CreateTask;
 import org.collabtask.task.core.dto.TaskClient;
 import org.collabtask.task.core.dto.UpdateTask;
@@ -12,4 +14,6 @@ public interface ITaskController {
     Uni<TaskClient> update(String id, UpdateTask updateTask);
 
     Uni<TaskClient> findById(String id);
+
+    Uni<PaginatedResponse<TaskClient>> findAll(Pagination pagination);
 }

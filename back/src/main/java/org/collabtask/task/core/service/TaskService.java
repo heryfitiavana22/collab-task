@@ -1,5 +1,7 @@
 package org.collabtask.task.core.service;
 
+import org.collabtask.helpers.PaginatedResponse;
+import org.collabtask.helpers.Pagination;
 import org.collabtask.task.core.contracts.ITaskRepository;
 import org.collabtask.task.core.contracts.ITaskService;
 import org.collabtask.task.core.dto.CreateTask;
@@ -39,5 +41,10 @@ public class TaskService implements ITaskService {
     @Override
     public Uni<TaskClient> findById(String id) throws TaskNotFoundException {
         return taskEntityRepository.findById(id);
+    }
+
+    @Override
+    public Uni<PaginatedResponse<TaskClient>> findAll(Pagination pagination) {
+        return taskEntityRepository.findAll(pagination);
     }
 }

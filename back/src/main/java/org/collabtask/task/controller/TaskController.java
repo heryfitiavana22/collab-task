@@ -1,5 +1,7 @@
 package org.collabtask.task.controller;
 
+import org.collabtask.helpers.PaginatedResponse;
+import org.collabtask.helpers.Pagination;
 import org.collabtask.task.core.contracts.ITaskController;
 import org.collabtask.task.core.contracts.ITaskService;
 import org.collabtask.task.core.dto.CreateTask;
@@ -44,6 +46,11 @@ public class TaskController implements ITaskController {
     @WithSession
     public Uni<TaskClient> findById(String id) {
         return taskService.findById(id);
+    }
+
+    @Override
+    public Uni<PaginatedResponse<TaskClient>> findAll(Pagination pagination) {
+        return taskService.findAll(pagination);
     }
 
 }
