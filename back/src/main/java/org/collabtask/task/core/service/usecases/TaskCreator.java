@@ -44,18 +44,20 @@ public class TaskCreator {
                     .failure(() -> new InvalidTaskException("Only TODO status is allowed when creating a task"));
         }
 
-        Uni<UserClient> createdByUser = userRepository.findById(createTask.getCreatedByUserId());
+        return userRepository.findById(createTask.getCreatedByUserId())
+                .flatMap(createdByUser -> {
+                    Uni<List<UserClient>> assignedUsers = Uni.combine().all().unis(
+                            createTask.getAssignedUsersId() != null ? createTask.getAssignedUsersId().stream()
+                                    .map(userRepository::findById)
+                                    .toList()
+                                    : List.<Uni<UserClient>>of())
+                            .with(list -> list.stream()
+                                    .map(item -> (UserClient) item)
+                                    .toList());
 
-        Uni<List<UserClient>> assignedUsers = Uni.combine().all().unis(
-                createTask.getAssignedUsersId() != null ? createTask.getAssignedUsersId().stream()
-                        .map(userRepository::findById)
-                        .toList()
-                        : List.<Uni<UserClient>>of())
-                .with(list -> list.stream()
-                        .map(item -> (UserClient) item)
-                        .toList());
+                    return assignedUsers
+                            .flatMap(users -> taskRepository.create(createTask));
+                });
 
-        return Uni.combine().all().unis(createdByUser, assignedUsers)
-                .withUni((u) -> taskRepository.create(createTask));
     }
 }

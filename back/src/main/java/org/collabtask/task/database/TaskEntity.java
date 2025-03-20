@@ -14,6 +14,7 @@ import org.collabtask.user.database.UserEntity;
 
 import io.smallrye.mutiny.Uni;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
@@ -34,10 +35,10 @@ public class TaskEntity extends BaseEntity implements ConvertibleToClient<TaskCl
     private TaskStatus status;
     private TaskPriority priority;
     private ZonedDateTime dueDate;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "task_user", joinColumns = @JoinColumn(name = "task_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<UserEntity> assignedUsers;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private UserEntity createdBy;
 
     public TaskEntity(CreateTask createTask) {
