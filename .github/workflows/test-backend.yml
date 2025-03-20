@@ -16,7 +16,7 @@ jobs:
         env:
           POSTGRES_USER: admin
           POSTGRES_PASSWORD: admin
-          POSTGRES_DB: db-back
+          POSTGRES_DB: db-back-test
         ports:
           - 5432:5432
         options: >-
@@ -50,7 +50,7 @@ jobs:
         env:
           SERVER_HOST: http://localhost:8080
           DB_URL: vertx-reactive:postgresql://localhost:5432
-          DB_NAME: db-back
+          DB_NAME: db-back-test
           DB_NAME_TEST: db-back-test
           DB_USERNAME: admin
           DB_PASSWORD: admin
