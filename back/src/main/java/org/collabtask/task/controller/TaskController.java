@@ -16,6 +16,7 @@ import org.collabtask.user.core.exception.UserNotFoundException;
 import io.quarkus.hibernate.reactive.panache.common.WithSession;
 import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.smallrye.mutiny.Uni;
+import jakarta.ws.rs.BeanParam;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
@@ -59,7 +60,9 @@ public class TaskController implements ITaskController {
     }
 
     @Override
-    public Uni<PaginatedResponse<TaskClient>> findAll(Pagination pagination) {
+    @GET
+    @WithSession
+    public Uni<PaginatedResponse<TaskClient>> findAll(@BeanParam Pagination pagination) {
         return taskService.findAll(pagination);
     }
 
