@@ -1,26 +1,26 @@
 package org.collabtask.task.core.service.usecases;
 
 import org.collabtask.helpers.ZonedDateTimeHelper;
+import org.collabtask.task.core.contracts.ITaskRepository;
 import org.collabtask.task.core.dto.TaskClient;
 import org.collabtask.task.core.dto.UpdateTask;
 import org.collabtask.task.core.exception.InvalidTaskException;
 import org.collabtask.task.core.exception.TaskNotFoundException;
 import org.collabtask.task.core.model.TaskStatus;
-import org.collabtask.task.database.TaskEntityRepository;
 
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class TaskUpdater {
-    TaskEntityRepository taskEntityRepository;
+    ITaskRepository taskRepository;
 
-    public TaskUpdater(TaskEntityRepository taskEntityRepository) {
-        this.taskEntityRepository = taskEntityRepository;
+    public TaskUpdater(ITaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
     }
 
     public Uni<TaskClient> update(String id, UpdateTask updateTask) throws TaskNotFoundException, InvalidTaskException {
-        return taskEntityRepository.findById(id)
+        return taskRepository.findById(id)
                 .flatMap(oldTask -> {
                     // Validate status transitions
                     if (oldTask.getStatus() == TaskStatus.COMPLETED && updateTask.getStatus() != null) {
@@ -84,7 +84,7 @@ public class TaskUpdater {
                         oldTask.setStatus(TaskStatus.IN_PROGRESS);
                     }
 
-                    return taskEntityRepository.update(id, updateTask);
+                    return taskRepository.update(id, updateTask);
                 });
     }
 }

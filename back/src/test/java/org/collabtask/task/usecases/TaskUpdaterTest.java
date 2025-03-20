@@ -257,7 +257,6 @@ public class TaskUpdaterTest {
                     updateTask.setStatus(TaskStatus.OVERDUE);
                     return taskUpdater.update(taskData.getTaskTodoNormale().getId(), updateTask);
                 }, throwable -> {
-                    System.out.println(throwable.getMessage());
                     assertTrue(throwable instanceof InvalidTaskException);
                 });
     }

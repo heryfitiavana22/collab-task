@@ -3,27 +3,26 @@ package org.collabtask.task.core.service.usecases;
 import java.util.List;
 
 import org.collabtask.helpers.ZonedDateTimeHelper;
+import org.collabtask.task.core.contracts.ITaskRepository;
 import org.collabtask.task.core.dto.CreateTask;
 import org.collabtask.task.core.dto.TaskClient;
 import org.collabtask.task.core.exception.InvalidTaskException;
 import org.collabtask.task.core.model.TaskStatus;
-import org.collabtask.task.database.TaskEntityRepository;
+import org.collabtask.user.core.contracts.IUserRepository;
 import org.collabtask.user.core.dto.UserClient;
 import org.collabtask.user.core.exception.UserNotFoundException;
-import org.collabtask.user.database.UserEntityRepository;
 
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class TaskCreator {
-    TaskEntityRepository taskEntityRepository;
+    private ITaskRepository taskRepository;
+    private IUserRepository userRepository;
 
-    UserEntityRepository userEntityRepository;
-
-    public TaskCreator(TaskEntityRepository taskEntityRepository, UserEntityRepository userEntityRepository) {
-        this.taskEntityRepository = taskEntityRepository;
-        this.userEntityRepository = userEntityRepository;
+    public TaskCreator(ITaskRepository taskRepository, IUserRepository userRepository) {
+        this.taskRepository = taskRepository;
+        this.userRepository = userRepository;
     }
 
     public Uni<TaskClient> create(CreateTask createTask) throws InvalidTaskException, UserNotFoundException {
@@ -45,11 +44,11 @@ public class TaskCreator {
                     .failure(() -> new InvalidTaskException("Only TODO status is allowed when creating a task"));
         }
 
-        Uni<UserClient> createdByUser = userEntityRepository.findById(createTask.getCreatedByUserId());
+        Uni<UserClient> createdByUser = userRepository.findById(createTask.getCreatedByUserId());
 
         Uni<List<UserClient>> assignedUsers = Uni.combine().all().unis(
                 createTask.getAssignedUsersId() != null ? createTask.getAssignedUsersId().stream()
-                        .map(userEntityRepository::findById)
+                        .map(userRepository::findById)
                         .toList()
                         : List.<Uni<UserClient>>of())
                 .with(list -> list.stream()
@@ -57,6 +56,6 @@ public class TaskCreator {
                         .toList());
 
         return Uni.combine().all().unis(createdByUser, assignedUsers)
-                .withUni((u) -> taskEntityRepository.create(createTask));
+                .withUni((u) -> taskRepository.create(createTask));
     }
 }
