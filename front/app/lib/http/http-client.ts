@@ -6,21 +6,6 @@ type RequestOptions = {
   body?: object | FormData;
 };
 
-type ResponseError = {
-  message: string;
-  status: number;
-};
-
-type Response<T> =
-  | {
-      success: true;
-      data: T;
-    }
-  | {
-      success: false;
-      error: ResponseError;
-    };
-
 type Method = "GET" | "POST" | "PUT" | "DELETE";
 
 export class HttpClient {
