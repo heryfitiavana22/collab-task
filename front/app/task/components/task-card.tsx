@@ -23,7 +23,6 @@ import {
   TooltipTrigger,
 } from "~/components/ui/tooltip";
 import { Avatar, AvatarFallback } from "~/components/ui/avatar";
-// import { deleteTask } from "~/lib/tasks";
 import {
   CalendarIcon,
   Clock,
@@ -55,8 +54,6 @@ export function TaskCard({ task }: TaskCardProps) {
       toast("Tâche supprimée", {
         description: "La tâche a été supprimée avec succès.",
       });
-      // Force a refresh of the current page
-      window.location.reload();
     } catch (error) {
       toast("Erreur", {
         description:
@@ -109,8 +106,10 @@ export function TaskCard({ task }: TaskCardProps) {
                   onConfirm={handleDelete}
                   disableButton={isDeleting}
                 >
-                  <Trash2 className="mr-2 h-4 w-4" />
-                  Supprimer
+                  <div>
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Supprimer
+                  </div>
                 </ConfirmDialog>
               </DropdownMenuItem>
             </DropdownMenuContent>
