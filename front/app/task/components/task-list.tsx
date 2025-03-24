@@ -92,7 +92,7 @@ export function TaskList() {
   const clearFilters = () => {
     setStatus("");
     setPriority("");
-    navigate("/tasks");
+    navigate("/");
   };
 
   const activeFilters = [
@@ -136,7 +136,7 @@ export function TaskList() {
               <SheetHeader>
                 <SheetTitle>Filtres</SheetTitle>
               </SheetHeader>
-              <div className="py-4 space-y-4">
+              <div className="p-4 space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="status">Statut</Label>
                   <Select
