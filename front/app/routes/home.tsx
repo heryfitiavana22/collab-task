@@ -1,5 +1,6 @@
 import type { Route } from "./+types/home";
 import { Welcome } from "../welcome/welcome";
+import { useEffect, useState } from "react";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -9,5 +10,11 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home() {
+  const [ok, setOk] = useState(true)
+
+  useEffect(() => {
+    console.log(ok);
+    
+  }, [])
   return <Welcome />;
 }
