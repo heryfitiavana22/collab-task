@@ -12,12 +12,13 @@ import {
 } from "~/components/ui/dialog";
 
 export function ConfirmDialog({
-  title = "Are you sure?",
-  description = "This action cannot be undone.",
-  confirmText = "Confirm",
-  cancelText = "Cancel",
+  title = "Êtes-vous sûr ?",
+  description = "Cette action ne peut pas être annulée.",
+  confirmText = "Confirmer",
+  cancelText = "Annuler",
   onConfirm,
   children,
+  disableButton = false,
 }: ConfirmDialogProps) {
   const [open, setOpen] = useState(false);
 
@@ -38,9 +39,13 @@ export function ConfirmDialog({
         </DialogHeader>
         <DialogFooter className="gap-2 sm:gap-0">
           <DialogClose asChild>
-            <Button variant="outline">{cancelText}</Button>
+            <Button variant="outline" disabled={disableButton}>
+              {cancelText}
+            </Button>
           </DialogClose>
-          <Button onClick={handleConfirm}>{confirmText}</Button>
+          <Button onClick={handleConfirm} disabled={disableButton}>
+            {confirmText}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -53,5 +58,6 @@ type ConfirmDialogProps = {
   confirmText?: string;
   cancelText?: string;
   onConfirm?: () => void;
+  disableButton?: boolean;
   children: React.ReactNode;
 };

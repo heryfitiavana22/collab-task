@@ -17,16 +17,6 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "~/components/ui/alert-dialog";
-import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
@@ -49,13 +39,13 @@ import {
 import { TaskPriority, TaskStatus, type Task } from "../core/task";
 import { Link } from "react-router";
 import { toast } from "sonner";
+import { ConfirmDialog } from "~/components/confirm-dialog";
 
 interface TaskCardProps {
   task: Task;
 }
 
 export function TaskCard({ task }: TaskCardProps) {
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async () => {
@@ -74,90 +64,6 @@ export function TaskCard({ task }: TaskCardProps) {
       });
     } finally {
       setIsDeleting(false);
-      setIsDeleteDialogOpen(false);
-    }
-  };
-
-  const getStatusBadge = (status: TaskStatus) => {
-    switch (status) {
-      case TaskStatus.TO_DO:
-        return (
-          <Badge variant="outline" className="flex items-center gap-1">
-            <Clock3 className="h-3 w-3" /> À faire
-          </Badge>
-        );
-      case TaskStatus.IN_PROGRESS:
-        return (
-          <Badge variant="secondary" className="flex items-center gap-1">
-            <HourglassIcon className="h-3 w-3" /> En cours
-          </Badge>
-        );
-      case TaskStatus.BLOCKED:
-        return (
-          <Badge variant="destructive" className="flex items-center gap-1">
-            <XCircle className="h-3 w-3" /> Bloquée
-          </Badge>
-        );
-      case TaskStatus.COMPLETED:
-        return (
-          <Badge
-            variant="success"
-            className="flex items-center gap-1 bg-green-100 text-green-800 hover:bg-green-200"
-          >
-            <CheckCircle2 className="h-3 w-3" /> Terminée
-          </Badge>
-        );
-      case TaskStatus.OVERDUE:
-        return (
-          <Badge variant="destructive" className="flex items-center gap-1">
-            <AlertTriangle className="h-3 w-3" /> En retard
-          </Badge>
-        );
-      default:
-        return <Badge variant="outline">{status}</Badge>;
-    }
-  };
-
-  const getPriorityBadge = (priority: TaskPriority) => {
-    switch (priority) {
-      case TaskPriority.basse:
-        return (
-          <Badge
-            variant="outline"
-            className="bg-blue-50 text-blue-700 hover:bg-blue-100 border-blue-200"
-          >
-            Basse
-          </Badge>
-        );
-      case TaskPriority.normale:
-        return (
-          <Badge
-            variant="outline"
-            className="bg-green-50 text-green-700 hover:bg-green-100 border-green-200"
-          >
-            Normale
-          </Badge>
-        );
-      case TaskPriority.haute:
-        return (
-          <Badge
-            variant="outline"
-            className="bg-amber-50 text-amber-700 hover:bg-amber-100 border-amber-200"
-          >
-            Haute
-          </Badge>
-        );
-      case TaskPriority.critique:
-        return (
-          <Badge
-            variant="outline"
-            className="bg-red-50 text-red-700 hover:bg-red-100 border-red-200"
-          >
-            Critique
-          </Badge>
-        );
-      default:
-        return <Badge variant="outline">{priority}</Badge>;
     }
   };
 
@@ -197,12 +103,15 @@ export function TaskCard({ task }: TaskCardProps) {
                   Modifier
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem
-                className="text-destructive focus:text-destructive"
-                onClick={() => setIsDeleteDialogOpen(true)}
-              >
-                <Trash2 className="mr-2 h-4 w-4" />
-                Supprimer
+              <DropdownMenuItem className="text-destructive focus:text-destructive">
+                <ConfirmDialog
+                  description="Cette action ne peut pas être annulée. Cette tâche sera définitivement supprimé"
+                  onConfirm={handleDelete}
+                  disableButton={isDeleting}
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  Supprimer
+                </ConfirmDialog>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -276,31 +185,89 @@ export function TaskCard({ task }: TaskCardProps) {
           {format(new Date(task.createdAt), "d MMM yyyy", { locale: fr })}
         </div>
       </CardFooter>
-
-      <AlertDialog
-        open={isDeleteDialogOpen}
-        onOpenChange={setIsDeleteDialogOpen}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Êtes-vous sûr ?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Cette action ne peut pas être annulée. Cette tâche sera
-              définitivement supprimée.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={isDeleting}>Annuler</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleDelete}
-              disabled={isDeleting}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
-              {isDeleting ? "Suppression..." : "Supprimer"}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </Card>
   );
 }
+
+const getStatusBadge = (status: TaskStatus) => {
+  switch (status) {
+    case TaskStatus.TO_DO:
+      return (
+        <Badge variant="outline" className="flex items-center gap-1">
+          <Clock3 className="h-3 w-3" /> À faire
+        </Badge>
+      );
+    case TaskStatus.IN_PROGRESS:
+      return (
+        <Badge variant="secondary" className="flex items-center gap-1">
+          <HourglassIcon className="h-3 w-3" /> En cours
+        </Badge>
+      );
+    case TaskStatus.BLOCKED:
+      return (
+        <Badge variant="destructive" className="flex items-center gap-1">
+          <XCircle className="h-3 w-3" /> Bloquée
+        </Badge>
+      );
+    case TaskStatus.COMPLETED:
+      return (
+        <Badge
+          variant="success"
+          className="flex items-center gap-1 bg-green-100 text-green-800 hover:bg-green-200"
+        >
+          <CheckCircle2 className="h-3 w-3" /> Terminée
+        </Badge>
+      );
+    case TaskStatus.OVERDUE:
+      return (
+        <Badge variant="destructive" className="flex items-center gap-1">
+          <AlertTriangle className="h-3 w-3" /> En retard
+        </Badge>
+      );
+    default:
+      return <Badge variant="outline">{status}</Badge>;
+  }
+};
+
+const getPriorityBadge = (priority: TaskPriority) => {
+  switch (priority) {
+    case TaskPriority.basse:
+      return (
+        <Badge
+          variant="outline"
+          className="bg-blue-50 text-blue-700 hover:bg-blue-100 border-blue-200"
+        >
+          Basse
+        </Badge>
+      );
+    case TaskPriority.normale:
+      return (
+        <Badge
+          variant="outline"
+          className="bg-green-50 text-green-700 hover:bg-green-100 border-green-200"
+        >
+          Normale
+        </Badge>
+      );
+    case TaskPriority.haute:
+      return (
+        <Badge
+          variant="outline"
+          className="bg-amber-50 text-amber-700 hover:bg-amber-100 border-amber-200"
+        >
+          Haute
+        </Badge>
+      );
+    case TaskPriority.critique:
+      return (
+        <Badge
+          variant="outline"
+          className="bg-red-50 text-red-700 hover:bg-red-100 border-red-200"
+        >
+          Critique
+        </Badge>
+      );
+    default:
+      return <Badge variant="outline">{priority}</Badge>;
+  }
+};
