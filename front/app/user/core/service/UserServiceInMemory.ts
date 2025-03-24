@@ -5,7 +5,17 @@ import type { PaginatedUser, User, CreateUser } from "../user";
 import type { IUserService } from "./IUserService";
 
 export class UserServiceInMemory implements IUserService {
-  private users: User[] = [];
+  private users: User[] = [
+    { id: "1", username: "john.doe", email: "john.doe@example.com" },
+    { id: "2", username: "jane.smith", email: "jane.smith@example.com" },
+    { id: "3", username: "bob.johnson", email: "bob.johnson@example.com" },
+    {
+      id: "4",
+      username: "alice.williams",
+      email: "alice.williams@example.com",
+    },
+    { id: "5", username: "charlie.brown", email: "charlie.brown@example.com" },
+  ];
 
   async findAll(): Promise<Result<PaginatedUser, HttpError>> {
     return ok({
