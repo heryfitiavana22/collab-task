@@ -7,7 +7,7 @@ import { Link } from "react-router";
 
 export default function TasksPage() {
   return (
-    <div className="mx-auto container py-6 space-y-6">
+    <>
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold tracking-tight">
           Gestion des tâches
@@ -23,6 +23,6 @@ export default function TasksPage() {
       <Suspense fallback={<TaskListSkeleton />}>
         <TaskList />
       </Suspense>
-    </div>
+    </>
   );
 }
