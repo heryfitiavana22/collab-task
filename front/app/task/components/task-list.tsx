@@ -33,6 +33,7 @@ import { Label } from "~/components/ui/label";
 import { Link, useSearchParams } from "react-router";
 import { useNavigate } from "react-router";
 import { TaskPriority, TaskStatus, type PaginatedTask } from "../core/task";
+import { taskService } from "../core/service";
 
 export function TaskList() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -50,20 +51,15 @@ export function TaskList() {
 
   useEffect(() => {
     const fetchTasks = async () => {
-      //   setLoading(true);
-      //   try {
-      //     const result = await getTasks({
-      //       page,
-      //       search,
-      //       status: status as TaskStatus | "",
-      //       priority: priority as TaskPriority | "",
-      //     });
-      //     setTasks(result);
-      //   } catch (error) {
-      //     console.error("Error fetching tasks:", error);
-      //   } finally {
-      //     setLoading(false);
-      //   }
+      setLoading(true);
+
+      const result = await taskService.findAll();
+      if (result.isOk()) {
+        setTasks(result.value);
+      } else {
+        console.log(result.asyncMap);
+      }
+      setLoading(false);
     };
 
     fetchTasks();
