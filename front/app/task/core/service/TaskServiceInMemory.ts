@@ -23,7 +23,7 @@ export class TaskServiceInMemory implements ITaskService {
     });
   }
 
-  async findById(id: string): Promise<Result<Task, HttpError | TaskNotFound>> {
+  async findById(id: string): Promise<Result<Task, HttpError | TaskNotFound>> {    
     const task = this.tasks.find((task) => task.id === id);
     if (!task) {
       return err(new TaskNotFound(`Task with id ${id} not found`));
