@@ -19,18 +19,23 @@ export function ConfirmDialog({
   onConfirm,
   children,
   disableButton = false,
+  open,
+  onOpenChange,
 }: ConfirmDialogProps) {
-  const [open, setOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleConfirm = () => {
     if (onConfirm) {
       onConfirm();
     }
-    setOpen(false);
+    setIsDialogOpen(false);
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog
+      open={open ?? isDialogOpen}
+      onOpenChange={onOpenChange ?? setIsDialogOpen}
+    >
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -59,5 +64,7 @@ type ConfirmDialogProps = {
   cancelText?: string;
   onConfirm?: () => void;
   disableButton?: boolean;
-  children: React.ReactNode;
+  children?: React.ReactNode;
+  open?: boolean;
+  onOpenChange?: (b: boolean) => void;
 };

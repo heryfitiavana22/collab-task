@@ -46,6 +46,7 @@ interface TaskCardProps {
 
 export function TaskCard({ task }: TaskCardProps) {
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const handleDelete = async () => {
     setIsDeleting(true);
@@ -100,17 +101,12 @@ export function TaskCard({ task }: TaskCardProps) {
                   Modifier
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem className="text-destructive focus:text-destructive">
-                <ConfirmDialog
-                  description="Cette action ne peut pas être annulée. Cette tâche sera définitivement supprimé"
-                  onConfirm={handleDelete}
-                  disableButton={isDeleting}
-                >
-                  <div>
-                    <Trash2 className="mr-2 h-4 w-4" />
-                    Supprimer
-                  </div>
-                </ConfirmDialog>
+              <DropdownMenuItem
+                className="text-destructive focus:text-destructive"
+                onClick={() => setIsDeleteDialogOpen(true)}
+              >
+                <Trash2 className="mr-2 h-4 w-4" />
+                Supprimer
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -184,6 +180,13 @@ export function TaskCard({ task }: TaskCardProps) {
           {format(new Date(task.createdAt), "d MMM yyyy", { locale: fr })}
         </div>
       </CardFooter>
+      <ConfirmDialog
+        description="Cette action ne peut pas être annulée. Cette tâche sera définitivement supprimé"
+        onConfirm={handleDelete}
+        disableButton={isDeleting}
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+      />
     </Card>
   );
 }
