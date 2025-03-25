@@ -179,6 +179,10 @@ export function TaskCard({ task }: TaskCardProps) {
           <Clock className="mr-1 h-3 w-3" />
           {format(new Date(task.createdAt), "d MMM yyyy", { locale: fr })}
         </div>
+        <div className="text-xs text-muted-foreground flex items-center mt-1">
+          <span className="font-medium">Créé par:</span>
+          <span className="ml-1">{task.createdBy.username}</span>
+        </div>
       </CardFooter>
       <ConfirmDialog
         description="Cette action ne peut pas être annulée. Cette tâche sera définitivement supprimé"
