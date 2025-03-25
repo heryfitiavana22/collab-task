@@ -40,7 +40,15 @@ import { Badge } from "~/components/ui/badge";
 import { Card, CardContent } from "~/components/ui/card";
 import { CalendarIcon, X } from "lucide-react";
 import { cn } from "~/lib/utils";
-import { TaskPriority, TaskStatus, type Task } from "../core/task";
+import {
+  CreateTaskSchema,
+  TaskPriority,
+  TaskStatus,
+  UpdateTaskSchema,
+  type CreateTask,
+  type Task,
+  type UpdateTask,
+} from "../core/task";
 import type { User } from "~/user/core/user";
 import { userService } from "~/user/core/service";
 import { toast } from "sonner";
@@ -61,7 +69,7 @@ const formSchema = z.object({
   createdByUserId: z.string().min(1, "Le créateur est requis"),
 });
 
-type FormValues = z.infer<typeof formSchema>;
+type FormValues = CreateTask | UpdateTask;
 
 interface TaskFormProps {
   task?: Task;
@@ -74,7 +82,7 @@ export default function TaskForm({ task }: TaskFormProps) {
   const navigate = useNavigate();
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(task ? UpdateTaskSchema : CreateTaskSchema),
     defaultValues: {
       title: task?.title || "",
       description: task?.description || "",
@@ -101,13 +109,17 @@ export default function TaskForm({ task }: TaskFormProps) {
     fetchUsers();
   }, [task, toast]);
 
+  function isCreate(values: FormValues): values is CreateTask {
+    return !task && "assignedUserIds" in values && "createdByUserId" in values;
+  }
+
   const onSubmit = async (values: FormValues) => {
     setIsSubmitting(true);
-    if (task) {
-      const result = await taskService.update(task.id, values);
+    if (isCreate(values)) {
+      const result = await taskService.create(values);
       if (result.isOk()) {
-        toast("Tâche mise à jour", {
-          description: "La tâche a été mise à jour avec succès.",
+        toast("Tâche créée", {
+          description: "La tâche a été créée avec succès.",
         });
       } else {
         toast("Erreur", {
@@ -116,10 +128,11 @@ export default function TaskForm({ task }: TaskFormProps) {
         });
       }
     } else {
-      const result = await taskService.create(values);
+      if (!task) return;
+      const result = await taskService.update(task.id, values);
       if (result.isOk()) {
-        toast("Tâche créée", {
-          description: "La tâche a été créée avec succès.",
+        toast("Tâche mise à jour", {
+          description: "La tâche a été mise à jour avec succès.",
         });
       } else {
         toast("Erreur", {
