@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
-import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -54,20 +53,6 @@ import { userService } from "~/user/core/service";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
 import { taskService } from "../core/service";
-
-const formSchema = z.object({
-  title: z.string().min(1, "Le titre est requis"),
-  description: z.string().min(1, "La description est requis"),
-  status: z.nativeEnum(TaskStatus),
-  priority: z.nativeEnum(TaskPriority),
-  dueDate: z.date({
-    required_error: "La date d'échéance est requise",
-  }),
-  assignedUserIds: z
-    .array(z.string())
-    .min(1, "Au moins un utilisateur doit être assigné"),
-  createdByUserId: z.string().min(1, "Le créateur est requis"),
-});
 
 type FormValues = CreateTask | UpdateTask;
 
