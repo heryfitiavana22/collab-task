@@ -1,9 +1,11 @@
 import { err, errAsync, ok, Result } from "neverthrow";
 import { HttpError } from "./http-errors";
+import type { ZodTypeAny } from "zod";
 
 type RequestOptions = {
   headers?: HeadersInit;
   body?: object | FormData;
+  zodSchema?: ZodTypeAny;
 };
 
 type Method = "GET" | "POST" | "PUT" | "DELETE";
@@ -44,6 +46,9 @@ export class HttpClient {
       }
 
       const data: T = await response.json();
+      if (options.zodSchema) {
+        return ok(options.zodSchema.parse(data));
+      }
       return ok(data);
       /* eslint-disable  @typescript-eslint/no-explicit-any */
     } catch (error: any) {
