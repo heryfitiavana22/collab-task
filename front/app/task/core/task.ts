@@ -18,11 +18,13 @@ export enum TaskPriority {
 }
 
 export const TaskSchemaBase = z.object({
-  title: z.string(),
-  description: z.string(),
+  title: z.string().min(1, "Le titre est requis"),
+  description: z.string().min(1, "La description est requis"),
   status: z.nativeEnum(TaskStatus),
   priority: z.nativeEnum(TaskPriority),
-  dueDate: z.coerce.date(),
+  dueDate: z.coerce.date({
+    required_error: "La date d'échéance est requise",
+  }),
 });
 
 export const TaskSchema = TaskSchemaBase.merge(
@@ -41,8 +43,8 @@ export const PaginatedTaskSchema = withPagination(ArrayTaskSchema);
 
 export const CreateTaskSchema = TaskSchemaBase.merge(
   z.object({
-    createdByUserId: z.string(),
-    assignedUserIds: z.array(z.string()),
+    createdByUserId: z.string().min(1, "Le créateur est requis"),
+    assignedUserIds: z.array(z.string()).min(1, "Au moins un utilisateur doit être assigné"),
   })
 );
 
