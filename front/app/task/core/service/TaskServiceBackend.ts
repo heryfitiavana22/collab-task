@@ -34,6 +34,6 @@ export class TaskServiceBackend implements ITaskService {
     id: string,
     updatTask: UpdateTask
   ): Promise<Result<Task, HttpError | TaskNotFound>> {
-    return this.httpClient.post(`/${id}`, updatTask);
+    return this.httpClient.put(`/${id}`, updatTask);
   }
 }
