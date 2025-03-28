@@ -12,8 +12,10 @@ This project is a simple **task management system** built with **Quarkus**, usin
 
 ## Tech Stack
 
-- `Backend`: Quarkus, Hibernate Reactive, Mutiny
+- `Backend`: Java, Quarkus, Hibernate Reactive, Mutiny
 
 - `Database`: PostgreSQL (Reactive)
 
 - `Frontend`: React, shadcn/ui
+
+## Demo
