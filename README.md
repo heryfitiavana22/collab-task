@@ -19,3 +19,7 @@ This project is a simple **task management system** built with **Quarkus**, usin
 - `Frontend`: React, shadcn/ui
 
 ## Demo
+
+
+https://github.com/user-attachments/assets/84f281c7-35eb-4488-a1b6-ef8afd63c2b7
+
